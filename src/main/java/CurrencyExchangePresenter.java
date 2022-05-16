@@ -31,7 +31,7 @@ public class CurrencyExchangePresenter {
 
     private void onNext(CurrencyExchange currencyExchange) {
         double result = currencyExchange.getResult();
-        String rate = currencyExchange.getInfo();
+        double rate = currencyExchange.getRate();
         view.setResultLabel(String.valueOf(result));
         view.setRateLabel(rate);
 

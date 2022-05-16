@@ -1,17 +1,19 @@
 package json;
 
 public class CurrencyExchange {
-    Main main;
+    String date;
+    double result;
+    Info info;
 
-    public String getInfo(){
-        return main.info.toString();
+    public double getRate(){
+        return info.rate;
     }
 
     public String getDate(){
-        return main.date;
+        return date;
     }
 
     public double getResult(){
-        return main.result;
+        return result;
     }
 }

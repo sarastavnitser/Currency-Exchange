@@ -73,8 +73,8 @@ public class CurrencyExchangeFrame extends JFrame {
         resultLabel.setText(result);
     }
 
-    public void setRateLabel(String rate) {
-        rateLabel.setText(rate);
+    public void setRateLabel(double rate) {
+        rateLabel.setText(String.valueOf(rate));
     }
 
     public static void main(String[] args) {
