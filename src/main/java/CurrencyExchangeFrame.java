@@ -1,4 +1,7 @@
 import json.CurrencyExchangeServiceFactory;
+import json.CurrencySymbols;
+import json.CurrencySymbolsService;
+import json.CurrencySymbolsServiceFactory;
 
 import javax.swing.*;
 import java.awt.*;
@@ -8,6 +11,8 @@ import java.text.NumberFormat;
 import static javax.swing.BoxLayout.*;
 
 public class CurrencyExchangeFrame extends JFrame {
+    private final JLabel fromLabel;
+    private final JLabel toLabel;
     private final JComboBox fromComboBox;
     private final JFormattedTextField amountTextField;
     private final JComboBox toComboBox;
@@ -18,7 +23,7 @@ public class CurrencyExchangeFrame extends JFrame {
 
     public CurrencyExchangeFrame() {
         setTitle("Currency Exchange");
-        setSize(400, 200);
+        setSize(400, 140);
         setDefaultCloseOperation(EXIT_ON_CLOSE);
 
         JPanel fromPanel = new JPanel();
@@ -38,22 +43,26 @@ public class CurrencyExchangeFrame extends JFrame {
 
         String[] choices = {"USD", "GBP", "EUR"};
 
+        fromLabel = new JLabel("From");
         fromComboBox = new JComboBox<>(choices);
         amountTextField = new JFormattedTextField(NumberFormat.getInstance());
 
+        fromPanel.add(fromLabel);
         fromPanel.add(fromComboBox);
         fromPanel.add(amountTextField);
 
+        toLabel = new JLabel("To");
         toComboBox = new JComboBox<>(choices);
         submitButton = new JButton("SUBMIT");
 
         submitButton.addActionListener(this::onSubmitClocked);
 
+        toPanel.add(toLabel);
         toPanel.add(toComboBox);
         toPanel.add(submitButton);
 
-        resultLabel = new JLabel("result");
-        rateLabel = new JLabel("rate");
+        resultLabel = new JLabel("");
+        rateLabel = new JLabel("");
 
         ratePanel.add(resultLabel);
         ratePanel.add(rateLabel);
@@ -61,7 +70,9 @@ public class CurrencyExchangeFrame extends JFrame {
 
 
         CurrencyExchangeServiceFactory factory = new CurrencyExchangeServiceFactory();
-        presenter = new CurrencyExchangePresenter(this, factory.getInstance());
+        CurrencySymbolsServiceFactory symbolsFactory = new CurrencySymbolsServiceFactory();
+        presenter = new CurrencyExchangePresenter(this, factory.getInstance(),  symbolsFactory.getInstance());
+
 
     }
 
@@ -70,11 +81,11 @@ public class CurrencyExchangeFrame extends JFrame {
     }
 
     public void setResultLabel(String result) {
-        resultLabel.setText(result);
+        resultLabel.setText("result: " +result);
     }
 
     public void setRateLabel(double rate) {
-        rateLabel.setText(String.valueOf(rate));
+        rateLabel.setText("rate: "  + String.valueOf(rate));
     }
 
     public static void main(String[] args) {

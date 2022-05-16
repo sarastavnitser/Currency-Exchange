@@ -2,16 +2,19 @@ import io.reactivex.disposables.Disposable;
 import io.reactivex.schedulers.Schedulers;
 import json.CurrencyExchange;
 import json.CurrencyExchangeService;
+import json.CurrencySymbolsService;
 
 public class CurrencyExchangePresenter {
 
     private final CurrencyExchangeFrame view;
     private final CurrencyExchangeService model;
+    private final CurrencySymbolsService symbolsModel;
     private Disposable disposable;
 
-    public CurrencyExchangePresenter(CurrencyExchangeFrame view, CurrencyExchangeService model) {
+    public CurrencyExchangePresenter(CurrencyExchangeFrame view, CurrencyExchangeService model, CurrencySymbolsService symbolsModel) {
         this.view = view;
         this.model = model;
+        this.symbolsModel = symbolsModel;
     }
 
 
