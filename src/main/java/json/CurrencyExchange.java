@@ -1,9 +1,12 @@
 package json;
 
+import java.util.Map;
+
 public class CurrencyExchange {
     String date;
     double result;
     Info info;
+    Map<String,Symbol> symbols;
 
     public double getRate(){
         return info.rate;
@@ -15,5 +18,9 @@ public class CurrencyExchange {
 
     public double getResult(){
         return result;
+    }
+
+    public Map<String,Symbol> getSymbols(){
+        return symbols;
     }
 }

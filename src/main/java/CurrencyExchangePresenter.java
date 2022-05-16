@@ -2,19 +2,22 @@ import io.reactivex.disposables.Disposable;
 import io.reactivex.schedulers.Schedulers;
 import json.CurrencyExchange;
 import json.CurrencyExchangeService;
-import json.CurrencySymbolsService;
+import json.Symbol;
+
+import java.util.Map;
 
 public class CurrencyExchangePresenter {
 
     private final CurrencyExchangeFrame view;
     private final CurrencyExchangeService model;
-    private final CurrencySymbolsService symbolsModel;
+
     private Disposable disposable;
 
-    public CurrencyExchangePresenter(CurrencyExchangeFrame view, CurrencyExchangeService model, CurrencySymbolsService symbolsModel) {
+
+    public CurrencyExchangePresenter(CurrencyExchangeFrame view, CurrencyExchangeService model) {
         this.view = view;
         this.model = model;
-        this.symbolsModel = symbolsModel;
+
     }
 
 
@@ -24,6 +27,8 @@ public class CurrencyExchangePresenter {
                 .observeOn(Schedulers.newThread())
                 .subscribe(this::onNext, this::onError);
     }
+
+
 
     public void cancel() {
         if (disposable != null) {
@@ -43,6 +48,16 @@ public class CurrencyExchangePresenter {
     private void onError(Throwable throwable) {
         throwable.printStackTrace();
         view.showError();
+
+    }
+
+    public void loadSymbolsChoices() {
+        Map<String,Symbol> symbols = model.getCurrencySymbols().subscribeOn(Schedulers.io()).blockingGet().getSymbols();
+        view.setSymbolsChoices(symbols);
+
+    }
+
+    private void symbolsOnNext(CurrencyExchange currencyExchange) {
 
     }
 }

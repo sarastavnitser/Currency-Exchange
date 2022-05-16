@@ -1,12 +1,12 @@
 import json.CurrencyExchangeServiceFactory;
-import json.CurrencySymbols;
-import json.CurrencySymbolsService;
 import json.CurrencySymbolsServiceFactory;
+import json.Symbol;
 
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.text.NumberFormat;
+import java.util.Map;
 
 import static javax.swing.BoxLayout.*;
 
@@ -14,14 +14,23 @@ public class CurrencyExchangeFrame extends JFrame {
     private final JLabel fromLabel;
     private final JLabel toLabel;
     private final JComboBox fromComboBox;
+    private final JLabel fromAbbreviatedLabel;
     private final JFormattedTextField amountTextField;
     private final JComboBox toComboBox;
+    private final JLabel toAbbreviatedLabel;
     private final JButton submitButton;
     private final JLabel resultLabel;
     private final JLabel rateLabel;
     private final CurrencyExchangePresenter presenter;
+    private Map<String,Symbol> symbolsMap;
+    private String[] symbolsArray;
 
     public CurrencyExchangeFrame() {
+        CurrencyExchangeServiceFactory factory = new CurrencyExchangeServiceFactory();
+        CurrencySymbolsServiceFactory symbolsFactory = new CurrencySymbolsServiceFactory();
+        presenter = new CurrencyExchangePresenter(this, factory.getInstance());
+        presenter.loadSymbolsChoices();
+        
         setTitle("Currency Exchange");
         setSize(400, 140);
         setDefaultCloseOperation(EXIT_ON_CLOSE);
@@ -40,25 +49,29 @@ public class CurrencyExchangeFrame extends JFrame {
 
 
         setLayout(new FlowLayout());
-
-        String[] choices = {"USD", "GBP", "EUR"};
-
+        
+        presenter.loadSymbolsChoices();
+        
         fromLabel = new JLabel("From");
-        fromComboBox = new JComboBox<>(choices);
+        fromComboBox = new JComboBox<>(symbolsArray);
+        fromAbbreviatedLabel = new JLabel(String.valueOf(symbolsMap.get(fromComboBox.getSelectedItem()).getDescription()));
         amountTextField = new JFormattedTextField(NumberFormat.getInstance());
 
         fromPanel.add(fromLabel);
         fromPanel.add(fromComboBox);
+        fromPanel.add(fromAbbreviatedLabel);
         fromPanel.add(amountTextField);
 
         toLabel = new JLabel("To");
-        toComboBox = new JComboBox<>(choices);
+        toComboBox = new JComboBox<>(symbolsArray);
+        toAbbreviatedLabel = new JLabel(String.valueOf(symbolsMap.get(toComboBox.getSelectedItem()).getDescription()));
         submitButton = new JButton("SUBMIT");
 
-        submitButton.addActionListener(this::onSubmitClocked);
+        submitButton.addActionListener(this::onSubmitClicked);
 
         toPanel.add(toLabel);
         toPanel.add(toComboBox);
+        toPanel.add(toAbbreviatedLabel);
         toPanel.add(submitButton);
 
         resultLabel = new JLabel("");
@@ -67,17 +80,11 @@ public class CurrencyExchangeFrame extends JFrame {
         ratePanel.add(resultLabel);
         ratePanel.add(rateLabel);
 
-
-
-        CurrencyExchangeServiceFactory factory = new CurrencyExchangeServiceFactory();
-        CurrencySymbolsServiceFactory symbolsFactory = new CurrencySymbolsServiceFactory();
-        presenter = new CurrencyExchangePresenter(this, factory.getInstance(),  symbolsFactory.getInstance());
-
-
+        
     }
 
-    private void onSubmitClocked(ActionEvent actionEvent) {
-        presenter.loadResultFromQuery(((Number)amountTextField.getValue()).doubleValue(), (String) fromComboBox.getSelectedItem(), (String) toComboBox.getSelectedItem());
+    private void onSubmitClicked(ActionEvent actionEvent) {
+        presenter.loadResultFromQuery(((Number)amountTextField.getValue()).doubleValue(), (String) symbolsMap.get(fromComboBox.getSelectedItem()).getCode(), (String) symbolsMap.get(toComboBox.getSelectedItem()).getCode());
     }
 
     public void setResultLabel(String result) {
@@ -94,6 +101,15 @@ public class CurrencyExchangeFrame extends JFrame {
     }
 
     public void showError() {
+
+    }
+    
+
+    public void setSymbolsChoices(Map<String,Symbol> symbols) {
+        symbolsMap = symbols;
+        symbolsArray = symbolsMap.keySet().toArray(new String[0]);
+
+        
 
     }
 }
