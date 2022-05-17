@@ -1,5 +1,4 @@
 import json.CurrencyExchangeServiceFactory;
-import json.CurrencySymbolsServiceFactory;
 import json.Symbol;
 
 import javax.swing.*;
@@ -24,6 +23,7 @@ public class CurrencyExchangeFrame extends JFrame implements ItemListener {
     private final JComboBox toComboBox;
     private final JLabel toAbbreviatedLabel;
     private final JButton submitButton;
+    private final JLabel dateLabel;
     private final JLabel resultLabel;
     private final JLabel rateLabel;
     private final CurrencyExchangePresenter presenter;
@@ -33,7 +33,6 @@ public class CurrencyExchangeFrame extends JFrame implements ItemListener {
 
     public CurrencyExchangeFrame() {
         CurrencyExchangeServiceFactory factory = new CurrencyExchangeServiceFactory();
-        CurrencySymbolsServiceFactory symbolsFactory = new CurrencySymbolsServiceFactory();
         presenter = new CurrencyExchangePresenter(this, factory.getInstance());
         presenter.loadSymbolsChoices();
 
@@ -58,7 +57,6 @@ public class CurrencyExchangeFrame extends JFrame implements ItemListener {
         ratePanel.setBorder(BorderFactory.createEmptyBorder(10, 5, 5, 5));
         ratePanel.setAlignmentX(Component.LEFT_ALIGNMENT);
         add(ratePanel);
-
 
         setLayout(new FlowLayout());
 
@@ -86,16 +84,16 @@ public class CurrencyExchangeFrame extends JFrame implements ItemListener {
         toPanel.add(toAbbreviatedLabel);
         toPanel.add(submitButton);
 
+        dateLabel = new JLabel(" ");
         resultLabel = new JLabel("");
-        resultLabel.setBorder(BorderFactory.createEmptyBorder(0,0, 20, 0));
+        resultLabel.setBorder(BorderFactory.createEmptyBorder(20, 0, 20, 0));
         rateLabel = new JLabel("");
 
+        ratePanel.add(dateLabel);
         ratePanel.add(resultLabel);
         ratePanel.add(rateLabel);
 
         setAction();
-
-
     }
 
     private void setAction() {
@@ -105,7 +103,6 @@ public class CurrencyExchangeFrame extends JFrame implements ItemListener {
 
     public void itemStateChanged(ItemEvent itemEvent) {
         String fromStr = String.valueOf(symbolsMap.get(symbolsArray[indexOf(descriptionsArray, fromComboBox.getSelectedItem())]).getCode());
-
         String toStr = String.valueOf(symbolsMap.get(symbolsArray[indexOf(descriptionsArray, toComboBox.getSelectedItem())]).getCode());
         fromAbbreviatedLabel.setText(fromStr);
         toAbbreviatedLabel.setText(toStr);
@@ -113,6 +110,10 @@ public class CurrencyExchangeFrame extends JFrame implements ItemListener {
 
     private void onSubmitClicked(ActionEvent actionEvent) {
         presenter.loadResultFromQuery(((Number) amountTextField.getValue()).doubleValue(), fromAbbreviatedLabel.getText(), toAbbreviatedLabel.getText());
+    }
+
+    public void setDateLabel(String date) {
+        dateLabel.setText("date: " + date);
     }
 
     public void setResultLabel(String result) {
@@ -123,13 +124,15 @@ public class CurrencyExchangeFrame extends JFrame implements ItemListener {
         rateLabel.setText("rate: " + String.valueOf(rate));
     }
 
+
     public static void main(String[] args) {
         CurrencyExchangeFrame frame = new CurrencyExchangeFrame();
         frame.setVisible(true);
     }
 
     public void showError() {
-
+        dateLabel.setText("Error: Incompatible values entered.");
+        resultLabel.setText("Please enter numbers only.");
     }
 
 
@@ -140,15 +143,11 @@ public class CurrencyExchangeFrame extends JFrame implements ItemListener {
         for (int i = 0; i < symbolsArray.length; i++) {
             descriptionsArray[i] = symbolsMap.get(symbolsArray[i]).getDescription();
         }
-
-
     }
 
     private static int indexOf(Object[] strArray, Object element) {
         int index = Arrays.asList(strArray).indexOf(element);
-
         return index;
-
     }
 }
 
