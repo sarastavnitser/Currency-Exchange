@@ -1,4 +1,3 @@
-import jdk.nashorn.internal.objects.NativeString;
 import json.CurrencyExchangeServiceFactory;
 import json.CurrencySymbolsServiceFactory;
 import json.Symbol;
@@ -9,14 +8,14 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
 import java.text.NumberFormat;
+import java.util.Arrays;
 import java.util.Map;
 import java.lang.*;
+
 import static javax.swing.BoxLayout.*;
 
 
-
-
-public class CurrencyExchangeFrame extends JFrame implements ItemListener{
+public class CurrencyExchangeFrame extends JFrame implements ItemListener {
     private final JLabel fromLabel;
     private final JLabel toLabel;
     private final JComboBox fromComboBox;
@@ -28,7 +27,7 @@ public class CurrencyExchangeFrame extends JFrame implements ItemListener{
     private final JLabel resultLabel;
     private final JLabel rateLabel;
     private final CurrencyExchangePresenter presenter;
-    private Map<String,Symbol> symbolsMap;
+    private Map<String, Symbol> symbolsMap;
     private String[] symbolsArray;
     private String[] descriptionsArray;
 
@@ -37,35 +36,37 @@ public class CurrencyExchangeFrame extends JFrame implements ItemListener{
         CurrencySymbolsServiceFactory symbolsFactory = new CurrencySymbolsServiceFactory();
         presenter = new CurrencyExchangePresenter(this, factory.getInstance());
         presenter.loadSymbolsChoices();
-        
+
         setTitle("Currency Exchange");
-        setSize(800, 165);
+        setSize(850, 165);
         setDefaultCloseOperation(EXIT_ON_CLOSE);
 
         JPanel fromPanel = new JPanel();
         fromPanel.setLayout(new BoxLayout(fromPanel, Y_AXIS));
         fromPanel.setBorder(BorderFactory.createEmptyBorder(10, 5, 5, 20));
-        add (fromPanel);
+        fromPanel.setAlignmentX(Component.LEFT_ALIGNMENT);
+        add(fromPanel);
 
         JPanel toPanel = new JPanel();
         toPanel.setLayout(new BoxLayout(toPanel, Y_AXIS));
         toPanel.setBorder(BorderFactory.createEmptyBorder(10, 5, 5, 20));
-        add (toPanel);
+        toPanel.setAlignmentX(Component.LEFT_ALIGNMENT);
+        add(toPanel);
 
         JPanel ratePanel = new JPanel();
         ratePanel.setLayout(new BoxLayout(ratePanel, Y_AXIS));
         ratePanel.setBorder(BorderFactory.createEmptyBorder(10, 5, 5, 5));
-
+        ratePanel.setAlignmentX(Component.LEFT_ALIGNMENT);
         add(ratePanel);
 
 
         setLayout(new FlowLayout());
-        
+
         presenter.loadSymbolsChoices();
-        
+
         fromLabel = new JLabel("From");
         fromComboBox = new JComboBox<>(descriptionsArray);
-        fromAbbreviatedLabel = new JLabel(String.valueOf(symbolsMap.get(symbolsArray[indexOf(descriptionsArray, fromComboBox.getSelectedItem())]).getDescription()));
+        fromAbbreviatedLabel = new JLabel(String.valueOf(symbolsMap.get(symbolsArray[indexOf(descriptionsArray, fromComboBox.getSelectedItem())]).getCode()));
         amountTextField = new JFormattedTextField(NumberFormat.getInstance());
 
         fromPanel.add(fromLabel);
@@ -75,7 +76,7 @@ public class CurrencyExchangeFrame extends JFrame implements ItemListener{
 
         toLabel = new JLabel("To");
         toComboBox = new JComboBox<>(descriptionsArray);
-        toAbbreviatedLabel = new JLabel(String.valueOf(symbolsMap.get(symbolsArray[indexOf(descriptionsArray, toComboBox.getSelectedItem())]).getDescription()));
+        toAbbreviatedLabel = new JLabel(String.valueOf(symbolsMap.get(symbolsArray[indexOf(descriptionsArray, toComboBox.getSelectedItem())]).getCode()));
         submitButton = new JButton("SUBMIT");
 
         submitButton.addActionListener(this::onSubmitClicked);
@@ -86,6 +87,7 @@ public class CurrencyExchangeFrame extends JFrame implements ItemListener{
         toPanel.add(submitButton);
 
         resultLabel = new JLabel("");
+        resultLabel.setBorder(BorderFactory.createEmptyBorder(0,0, 20, 0));
         rateLabel = new JLabel("");
 
         ratePanel.add(resultLabel);
@@ -93,32 +95,32 @@ public class CurrencyExchangeFrame extends JFrame implements ItemListener{
 
         setAction();
 
-        
+
     }
 
     private void setAction() {
-        fromComboBox.addItemListener( this);
-        toComboBox.addItemListener( this);
+        fromComboBox.addItemListener(this);
+        toComboBox.addItemListener(this);
     }
 
-    public void itemStateChanged(ItemEvent itemEvent){
-        String fromStr = String.valueOf(symbolsMap.get(symbolsArray[descriptionsArray.indexOf( fromComboBox.getSelectedItem())]).getDescription());
+    public void itemStateChanged(ItemEvent itemEvent) {
+        String fromStr = String.valueOf(symbolsMap.get(symbolsArray[indexOf(descriptionsArray, fromComboBox.getSelectedItem())]).getCode());
 
-       String toStr = String.valueOf(symbolsMap.get(symbolsArray[indexOf(descriptionsArray, toComboBox.getSelectedItem())]).getDescription());
-       fromAbbreviatedLabel.setText(fromStr);
-       toAbbreviatedLabel.setText(toStr);
+        String toStr = String.valueOf(symbolsMap.get(symbolsArray[indexOf(descriptionsArray, toComboBox.getSelectedItem())]).getCode());
+        fromAbbreviatedLabel.setText(fromStr);
+        toAbbreviatedLabel.setText(toStr);
     }
 
     private void onSubmitClicked(ActionEvent actionEvent) {
-        presenter.loadResultFromQuery(((Number)amountTextField.getValue()).doubleValue(), (String) symbolsMap.get(fromComboBox.getSelectedItem()).getCode(), (String) symbolsMap.get(toComboBox.getSelectedItem()).getCode());
+        presenter.loadResultFromQuery(((Number) amountTextField.getValue()).doubleValue(), fromAbbreviatedLabel.getText(), toAbbreviatedLabel.getText());
     }
 
     public void setResultLabel(String result) {
-        resultLabel.setText("result: " +result);
+        resultLabel.setText("result: " + result);
     }
 
     public void setRateLabel(double rate) {
-        rateLabel.setText("rate: "  + String.valueOf(rate));
+        rateLabel.setText("rate: " + String.valueOf(rate));
     }
 
     public static void main(String[] args) {
@@ -129,17 +131,23 @@ public class CurrencyExchangeFrame extends JFrame implements ItemListener{
     public void showError() {
 
     }
-    
 
-    public void setSymbolsChoices(Map<String,Symbol> symbols) {
+
+    public void setSymbolsChoices(Map<String, Symbol> symbols) {
         symbolsMap = symbols;
         symbolsArray = symbolsMap.keySet().toArray(new String[0]);
         descriptionsArray = new String[symbolsArray.length];
-        for (int i = 0; i<symbolsArray.length;i++){
+        for (int i = 0; i < symbolsArray.length; i++) {
             descriptionsArray[i] = symbolsMap.get(symbolsArray[i]).getDescription();
         }
 
-        
+
+    }
+
+    private static int indexOf(Object[] strArray, Object element) {
+        int index = Arrays.asList(strArray).indexOf(element);
+
+        return index;
 
     }
 }

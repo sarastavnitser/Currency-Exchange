@@ -9,24 +9,25 @@ import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
 
+import java.util.Arrays;
+
 public class testing {
     public static void main(String[] args) throws IOException {
-        String url_str = "https://api.exchangerate.host/symbols";
-
-        URL url = new URL(url_str);
-        HttpURLConnection request = (HttpURLConnection) url.openConnection();
-        request.connect();
-
-        JsonParser jp = new JsonParser();
-        JsonElement root = jp.parse(new InputStreamReader((InputStream) request.getContent()));
-        JsonObject jsonobj = root.getAsJsonObject();
+        String[] letters = new String[] {"a", "b", "c"};
+        int i = indexOf(letters, "a");
+        System.out.println(i);
 
 
+    }
+    private static int indexOf(Object[] strArray, Object element){
 
-        JsonElement results = jsonobj.get("symbols");
-        System.out.println(results.toString());
+        /*
+         * Convert array to List and then
+         * use indexOf method of List class.
+         */
+        int index = Arrays.asList(strArray).indexOf(element);
 
-
+        return index;
 
     }
 }
