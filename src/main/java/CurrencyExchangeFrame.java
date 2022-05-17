@@ -1,3 +1,4 @@
+import jdk.nashorn.internal.objects.NativeString;
 import json.CurrencyExchangeServiceFactory;
 import json.CurrencySymbolsServiceFactory;
 import json.Symbol;
@@ -5,12 +6,17 @@ import json.Symbol;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
+import java.awt.event.ItemEvent;
+import java.awt.event.ItemListener;
 import java.text.NumberFormat;
 import java.util.Map;
-
+import java.lang.*;
 import static javax.swing.BoxLayout.*;
 
-public class CurrencyExchangeFrame extends JFrame {
+
+
+
+public class CurrencyExchangeFrame extends JFrame implements ItemListener{
     private final JLabel fromLabel;
     private final JLabel toLabel;
     private final JComboBox fromComboBox;
@@ -24,6 +30,7 @@ public class CurrencyExchangeFrame extends JFrame {
     private final CurrencyExchangePresenter presenter;
     private Map<String,Symbol> symbolsMap;
     private String[] symbolsArray;
+    private String[] descriptionsArray;
 
     public CurrencyExchangeFrame() {
         CurrencyExchangeServiceFactory factory = new CurrencyExchangeServiceFactory();
@@ -32,19 +39,23 @@ public class CurrencyExchangeFrame extends JFrame {
         presenter.loadSymbolsChoices();
         
         setTitle("Currency Exchange");
-        setSize(400, 140);
+        setSize(800, 165);
         setDefaultCloseOperation(EXIT_ON_CLOSE);
 
         JPanel fromPanel = new JPanel();
         fromPanel.setLayout(new BoxLayout(fromPanel, Y_AXIS));
+        fromPanel.setBorder(BorderFactory.createEmptyBorder(10, 5, 5, 20));
         add (fromPanel);
 
         JPanel toPanel = new JPanel();
         toPanel.setLayout(new BoxLayout(toPanel, Y_AXIS));
+        toPanel.setBorder(BorderFactory.createEmptyBorder(10, 5, 5, 20));
         add (toPanel);
 
         JPanel ratePanel = new JPanel();
         ratePanel.setLayout(new BoxLayout(ratePanel, Y_AXIS));
+        ratePanel.setBorder(BorderFactory.createEmptyBorder(10, 5, 5, 5));
+
         add(ratePanel);
 
 
@@ -53,8 +64,8 @@ public class CurrencyExchangeFrame extends JFrame {
         presenter.loadSymbolsChoices();
         
         fromLabel = new JLabel("From");
-        fromComboBox = new JComboBox<>(symbolsArray);
-        fromAbbreviatedLabel = new JLabel(String.valueOf(symbolsMap.get(fromComboBox.getSelectedItem()).getDescription()));
+        fromComboBox = new JComboBox<>(descriptionsArray);
+        fromAbbreviatedLabel = new JLabel(String.valueOf(symbolsMap.get(symbolsArray[indexOf(descriptionsArray, fromComboBox.getSelectedItem())]).getDescription()));
         amountTextField = new JFormattedTextField(NumberFormat.getInstance());
 
         fromPanel.add(fromLabel);
@@ -63,8 +74,8 @@ public class CurrencyExchangeFrame extends JFrame {
         fromPanel.add(amountTextField);
 
         toLabel = new JLabel("To");
-        toComboBox = new JComboBox<>(symbolsArray);
-        toAbbreviatedLabel = new JLabel(String.valueOf(symbolsMap.get(toComboBox.getSelectedItem()).getDescription()));
+        toComboBox = new JComboBox<>(descriptionsArray);
+        toAbbreviatedLabel = new JLabel(String.valueOf(symbolsMap.get(symbolsArray[indexOf(descriptionsArray, toComboBox.getSelectedItem())]).getDescription()));
         submitButton = new JButton("SUBMIT");
 
         submitButton.addActionListener(this::onSubmitClicked);
@@ -80,7 +91,22 @@ public class CurrencyExchangeFrame extends JFrame {
         ratePanel.add(resultLabel);
         ratePanel.add(rateLabel);
 
+        setAction();
+
         
+    }
+
+    private void setAction() {
+        fromComboBox.addItemListener( this);
+        toComboBox.addItemListener( this);
+    }
+
+    public void itemStateChanged(ItemEvent itemEvent){
+        String fromStr = String.valueOf(symbolsMap.get(symbolsArray[descriptionsArray.indexOf( fromComboBox.getSelectedItem())]).getDescription());
+
+       String toStr = String.valueOf(symbolsMap.get(symbolsArray[indexOf(descriptionsArray, toComboBox.getSelectedItem())]).getDescription());
+       fromAbbreviatedLabel.setText(fromStr);
+       toAbbreviatedLabel.setText(toStr);
     }
 
     private void onSubmitClicked(ActionEvent actionEvent) {
@@ -108,6 +134,10 @@ public class CurrencyExchangeFrame extends JFrame {
     public void setSymbolsChoices(Map<String,Symbol> symbols) {
         symbolsMap = symbols;
         symbolsArray = symbolsMap.keySet().toArray(new String[0]);
+        descriptionsArray = new String[symbolsArray.length];
+        for (int i = 0; i<symbolsArray.length;i++){
+            descriptionsArray[i] = symbolsMap.get(symbolsArray[i]).getDescription();
+        }
 
         
 
