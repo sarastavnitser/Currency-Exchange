@@ -122,7 +122,6 @@ public class CurrencyExchangeFrame extends JFrame implements ItemListener {
         rateLabel.setText("rate: " + String.valueOf(rate));
     }
 
-
     public static void main(String[] args) {
         CurrencyExchangeFrame frame = new CurrencyExchangeFrame();
         frame.setVisible(true);
@@ -133,7 +132,6 @@ public class CurrencyExchangeFrame extends JFrame implements ItemListener {
         resultLabel.setText("Please enter numbers only.");
     }
 
-
     public void setSymbolsChoices(Map<String, Symbol> symbols) {
         symbolsMap = symbols;
         symbolsArray = symbolsMap.keySet().toArray(new String[0]);
@@ -143,7 +141,7 @@ public class CurrencyExchangeFrame extends JFrame implements ItemListener {
         }
     }
 
-    private static int indexOf(String[] strArray, Object element) {
+    private int indexOf(String[] strArray, Object element) {
         int index = Arrays.asList(strArray).indexOf(element);
         return index;
     }
