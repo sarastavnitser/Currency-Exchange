@@ -11,6 +11,7 @@ public class CurrencyExchangePresenter {
     private final CurrencyExchangeFrame view;
     private final CurrencyExchangeService model;
     private Disposable disposable;
+    private Disposable symbolsDisposable;
 
     public CurrencyExchangePresenter(CurrencyExchangeFrame view, CurrencyExchangeService model) {
         this.view = view;
@@ -45,7 +46,13 @@ public class CurrencyExchangePresenter {
     }
 
     public void loadSymbolsChoices() {
-        Map<String, Symbol> symbols = model.getCurrencySymbols().subscribeOn(Schedulers.io()).blockingGet().getSymbols();
+        symbolsDisposable = model.getCurrencySymbols()
+                .observeOn(Schedulers.newThread())
+                .subscribe(this::onSymbolsNext);
+    }
+
+    private void onSymbolsNext(CurrencyExchange object) {
+        Map<String, Symbol> symbols = object.getSymbols();
         view.setSymbolsChoices(symbols);
     }
 }
