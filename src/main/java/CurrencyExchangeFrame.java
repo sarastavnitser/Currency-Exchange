@@ -91,10 +91,10 @@ public class CurrencyExchangeFrame extends JFrame implements ItemListener {
         ratePanel.add(resultLabel);
         ratePanel.add(rateLabel);
 
-        setAction();
+        doAction();
     }
 
-    private void setAction() {
+    private void doAction() {
         fromComboBox.addItemListener(this);
         toComboBox.addItemListener(this);
     }
