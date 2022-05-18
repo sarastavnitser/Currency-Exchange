@@ -60,8 +60,6 @@ public class CurrencyExchangeFrame extends JFrame implements ItemListener {
 
         setLayout(new FlowLayout());
 
-        presenter.loadSymbolsChoices();
-
         fromLabel = new JLabel("From");
         fromComboBox = new JComboBox<>(descriptionsArray);
         fromAbbreviatedLabel = new JLabel(String.valueOf(symbolsMap.get(symbolsArray[indexOf(descriptionsArray, fromComboBox.getSelectedItem())]).getCode()));
