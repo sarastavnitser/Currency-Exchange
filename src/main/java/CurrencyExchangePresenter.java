@@ -18,7 +18,10 @@ public class CurrencyExchangePresenter {
     }
 
     public void loadResultFromQuery(double amount, String fromComboBox, String toComboBox) {
-        disposable = model.getCurrencyExchange(amount, fromComboBox, toComboBox).subscribeOn(Schedulers.io()).observeOn(Schedulers.newThread()).subscribe(this::onNext, this::onError);
+        disposable = model.getCurrencyExchange(amount, fromComboBox, toComboBox)
+                .subscribeOn(Schedulers.io())
+                .observeOn(Schedulers.newThread())
+                .subscribe(this::onNext, this::onError);
     }
 
     public void cancel() {

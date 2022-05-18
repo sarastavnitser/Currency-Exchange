@@ -102,8 +102,8 @@ public class CurrencyExchangeFrame extends JFrame implements ItemListener {
     }
 
     public void itemStateChanged(ItemEvent itemEvent) {
-        String fromStr = String.valueOf(symbolsMap.get(symbolsArray[indexOf(descriptionsArray, fromComboBox.getSelectedItem())]).getCode());
-        String toStr = String.valueOf(symbolsMap.get(symbolsArray[indexOf(descriptionsArray, toComboBox.getSelectedItem())]).getCode());
+        String fromStr = symbolsMap.get(symbolsArray[indexOf(descriptionsArray, fromComboBox.getSelectedItem())]).getCode();
+        String toStr = symbolsMap.get(symbolsArray[indexOf(descriptionsArray, toComboBox.getSelectedItem())]).getCode();
         fromAbbreviatedLabel.setText(fromStr);
         toAbbreviatedLabel.setText(toStr);
     }
@@ -145,7 +145,7 @@ public class CurrencyExchangeFrame extends JFrame implements ItemListener {
         }
     }
 
-    private static int indexOf(Object[] strArray, Object element) {
+    private static int indexOf(String[] strArray, Object element) {
         int index = Arrays.asList(strArray).indexOf(element);
         return index;
     }
