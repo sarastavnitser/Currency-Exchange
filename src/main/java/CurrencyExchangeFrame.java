@@ -43,13 +43,13 @@ public class CurrencyExchangeFrame extends JFrame implements ItemListener {
         JPanel fromPanel = new JPanel();
         fromPanel.setLayout(new BoxLayout(fromPanel, Y_AXIS));
         fromPanel.setBorder(BorderFactory.createEmptyBorder(10, 5, 5, 20));
-        fromPanel.setAlignmentX(Component.LEFT_ALIGNMENT);
+        fromPanel.setAlignmentX(Component.CENTER_ALIGNMENT);
         add(fromPanel);
 
         JPanel toPanel = new JPanel();
         toPanel.setLayout(new BoxLayout(toPanel, Y_AXIS));
         toPanel.setBorder(BorderFactory.createEmptyBorder(10, 5, 5, 20));
-        toPanel.setAlignmentX(Component.LEFT_ALIGNMENT);
+        toPanel.setAlignmentX(Component.CENTER_ALIGNMENT);
         add(toPanel);
 
         JPanel ratePanel = new JPanel();
@@ -61,9 +61,12 @@ public class CurrencyExchangeFrame extends JFrame implements ItemListener {
         setLayout(new FlowLayout());
 
         fromLabel = new JLabel("From");
+        fromLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
         fromComboBox = new JComboBox<>(descriptionsArray);
         fromAbbreviatedLabel = new JLabel(String.valueOf(symbolsMap.get(symbolsArray[indexOf(descriptionsArray, fromComboBox.getSelectedItem())]).getCode()));
+        fromAbbreviatedLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
         amountTextField = new JFormattedTextField(NumberFormat.getInstance());
+        amountTextField.setValue(1);
 
         fromPanel.add(fromLabel);
         fromPanel.add(fromComboBox);
@@ -71,9 +74,12 @@ public class CurrencyExchangeFrame extends JFrame implements ItemListener {
         fromPanel.add(amountTextField);
 
         toLabel = new JLabel("To");
+        toLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
         toComboBox = new JComboBox<>(descriptionsArray);
         toAbbreviatedLabel = new JLabel(String.valueOf(symbolsMap.get(symbolsArray[indexOf(descriptionsArray, toComboBox.getSelectedItem())]).getCode()));
+        toAbbreviatedLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
         submitButton = new JButton("SUBMIT");
+        submitButton.setAlignmentX(Component.CENTER_ALIGNMENT);
 
         submitButton.addActionListener(this::onSubmitClicked);
 
@@ -84,12 +90,12 @@ public class CurrencyExchangeFrame extends JFrame implements ItemListener {
 
         dateLabel = new JLabel(" ");
         resultLabel = new JLabel("");
-        resultLabel.setBorder(BorderFactory.createEmptyBorder(20, 0, 20, 0));
         rateLabel = new JLabel("");
+        rateLabel.setBorder(BorderFactory.createEmptyBorder(20, 0, 20, 0));
 
         ratePanel.add(dateLabel);
-        ratePanel.add(resultLabel);
         ratePanel.add(rateLabel);
+        ratePanel.add(resultLabel);
 
         doAction();
     }
@@ -111,6 +117,7 @@ public class CurrencyExchangeFrame extends JFrame implements ItemListener {
     }
 
     private void onSubmitClicked(ActionEvent actionEvent) {
+
         presenter.loadResultFromQuery(((Number) amountTextField.getValue()).doubleValue(), fromAbbreviatedLabel.getText(), toAbbreviatedLabel.getText());
     }
 
