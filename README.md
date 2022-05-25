@@ -1,4 +1,5 @@
-#Currency Converter
+#CurrencyConverter
+
 ###Sara Stavnitser
 
 This application allows users to find the value of their money in other currencies.

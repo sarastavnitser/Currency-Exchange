@@ -3,3 +3,5 @@ out/
 .gradle/
 build/
 .DS_Store
+build/*
+!build/libs
