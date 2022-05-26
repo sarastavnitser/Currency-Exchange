@@ -151,12 +151,13 @@ public class CurrencyExchangeFrame extends JFrame implements ItemListener {
         }
         fromComboBox.removeAllItems();
         toComboBox.removeAllItems();
-        fromAbbreviatedLabel.setText(String.valueOf(symbolsMap.get(symbolsArray[indexOf(descriptionsArray, fromComboBox.getSelectedItem())]).getCode()));
-        toAbbreviatedLabel.setText(String.valueOf(symbolsMap.get(symbolsArray[indexOf(descriptionsArray, toComboBox.getSelectedItem())]).getCode()));
+
         for (int i = 0; i <descriptionsArray.length; i ++){
             fromComboBox.addItem(descriptionsArray[i]);
             toComboBox.addItem(descriptionsArray[i]);
         }
+        fromAbbreviatedLabel.setText(String.valueOf(symbolsMap.get(symbolsArray[indexOf(descriptionsArray, fromComboBox.getSelectedItem())]).getCode()));
+        toAbbreviatedLabel.setText(String.valueOf(symbolsMap.get(symbolsArray[indexOf(descriptionsArray, toComboBox.getSelectedItem())]).getCode()));
     }
 
     private int indexOf(String[] strArray, Object element) {
