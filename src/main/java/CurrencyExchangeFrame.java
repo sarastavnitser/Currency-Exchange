@@ -34,7 +34,7 @@ public class CurrencyExchangeFrame extends JFrame implements ItemListener {
     public CurrencyExchangeFrame() {
         CurrencyExchangeServiceFactory factory = new CurrencyExchangeServiceFactory();
         presenter = new CurrencyExchangePresenter(this, factory.getInstance());
-        presenter.loadSymbolsChoices();
+
 
         setTitle("Currency Exchange");
         setSize(850, 165);
@@ -62,8 +62,8 @@ public class CurrencyExchangeFrame extends JFrame implements ItemListener {
 
         fromLabel = new JLabel("From");
         fromLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
-        fromComboBox = new JComboBox<>(descriptionsArray);
-        fromAbbreviatedLabel = new JLabel(String.valueOf(symbolsMap.get(symbolsArray[indexOf(descriptionsArray, fromComboBox.getSelectedItem())]).getCode()));
+        fromComboBox = new JComboBox(new String[]{"                            "});
+        fromAbbreviatedLabel = new JLabel(" ");
         fromAbbreviatedLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
         amountTextField = new JFormattedTextField(NumberFormat.getInstance());
         amountTextField.setValue(1);
@@ -75,8 +75,11 @@ public class CurrencyExchangeFrame extends JFrame implements ItemListener {
 
         toLabel = new JLabel("To");
         toLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
-        toComboBox = new JComboBox<>(descriptionsArray);
-        toAbbreviatedLabel = new JLabel(String.valueOf(symbolsMap.get(symbolsArray[indexOf(descriptionsArray, toComboBox.getSelectedItem())]).getCode()));
+
+
+        toComboBox = new JComboBox(new String[]{"                            "});
+        toAbbreviatedLabel = new JLabel(" ");
+
         toAbbreviatedLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
         submitButton = new JButton("SUBMIT");
         submitButton.setAlignmentX(Component.CENTER_ALIGNMENT);
@@ -96,7 +99,7 @@ public class CurrencyExchangeFrame extends JFrame implements ItemListener {
         ratePanel.add(dateLabel);
         ratePanel.add(rateLabel);
         ratePanel.add(resultLabel);
-
+        presenter.loadSymbolsChoices();
         doAction();
     }
 
@@ -133,10 +136,6 @@ public class CurrencyExchangeFrame extends JFrame implements ItemListener {
         rateLabel.setText("rate: " + String.valueOf(rate));
     }
 
-    public static void main(String[] args) {
-        CurrencyExchangeFrame frame = new CurrencyExchangeFrame();
-        frame.setVisible(true);
-    }
 
     public void showError() {
         dateLabel.setText("Error: Incompatible values entered.");
@@ -150,11 +149,24 @@ public class CurrencyExchangeFrame extends JFrame implements ItemListener {
         for (int i = 0; i < symbolsArray.length; i++) {
             descriptionsArray[i] = symbolsMap.get(symbolsArray[i]).getDescription();
         }
+        fromComboBox.removeAllItems();
+        toComboBox.removeAllItems();
+        fromAbbreviatedLabel.setText(String.valueOf(symbolsMap.get(symbolsArray[indexOf(descriptionsArray, fromComboBox.getSelectedItem())]).getCode()));
+        toAbbreviatedLabel.setText(String.valueOf(symbolsMap.get(symbolsArray[indexOf(descriptionsArray, toComboBox.getSelectedItem())]).getCode()));
+        for (int i = 0; i <descriptionsArray.length; i ++){
+            fromComboBox.addItem(descriptionsArray[i]);
+            toComboBox.addItem(descriptionsArray[i]);
+        }
     }
 
     private int indexOf(String[] strArray, Object element) {
         int index = Arrays.asList(strArray).indexOf(element);
         return index;
+    }
+
+    public static void main(String[] args) {
+        CurrencyExchangeFrame frame = new CurrencyExchangeFrame();
+        frame.setVisible(true);
     }
 }
 
