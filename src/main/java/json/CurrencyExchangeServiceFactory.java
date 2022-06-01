@@ -14,7 +14,7 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 
 public class CurrencyExchangeServiceFactory {
-    public CurrencyExchangeService getInstance(){
+    public CurrencyExchangeService getInstance() {
         Retrofit retrofit = new Retrofit.Builder()
                 .baseUrl("https://api.exchangerate.host/")
                 .addConverterFactory(GsonConverterFactory.create())

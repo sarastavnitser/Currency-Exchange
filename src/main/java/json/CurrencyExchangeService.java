@@ -8,4 +8,6 @@ public interface CurrencyExchangeService {
     @GET("convert?")
     Single<CurrencyExchange> getCurrencyExchange(@Query("amount") double amount, @Query("from") String from, @Query("to") String to);
 
+    @GET("symbols")
+    Single<CurrencyExchange> getCurrencySymbols();
 }
