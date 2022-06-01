@@ -47,7 +47,7 @@ public class CurrencyExchangePresenter {
 
     public void loadSymbolsChoices() {
         symbolsDisposable = model.getCurrencySymbols()
-               .subscribeOn(Schedulers.trampoline())
+               .subscribeOn(Schedulers.io())
                 .observeOn(Schedulers.newThread())
                 .subscribe(this::onSymbolsNext);
     }

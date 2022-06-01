@@ -100,23 +100,26 @@ public class CurrencyExchangeFrame extends JFrame implements ItemListener {
         ratePanel.add(rateLabel);
         ratePanel.add(resultLabel);
         presenter.loadSymbolsChoices();
-        doAction();
+        addComboBoxListeners();
     }
 
-    private void doAction() {
+    private void addComboBoxListeners() {
         fromComboBox.addItemListener(this);
         toComboBox.addItemListener(this);
     }
 
     public void itemStateChanged(ItemEvent itemEvent) {
+        if (fromComboBox.getSelectedItem() == null || toComboBox.getSelectedItem() == null) {
+            return;
+        }
+
         String fromCode = symbolsArray[indexOf(descriptionsArray, fromComboBox.getSelectedItem())];
         String fromStr = symbolsMap.get(fromCode).getCode();
-
+        fromAbbreviatedLabel.setText(fromStr);
         String toCode = symbolsArray[indexOf(descriptionsArray, toComboBox.getSelectedItem())];
         String toStr = symbolsMap.get(toCode).getCode();
-
-        fromAbbreviatedLabel.setText(fromStr);
         toAbbreviatedLabel.setText(toStr);
+
     }
 
     private void onSubmitClicked(ActionEvent actionEvent) {
@@ -152,7 +155,7 @@ public class CurrencyExchangeFrame extends JFrame implements ItemListener {
         fromComboBox.removeAllItems();
         toComboBox.removeAllItems();
 
-        for (int i = 0; i <descriptionsArray.length; i ++){
+        for (int i = 0; i < descriptionsArray.length; i++) {
             fromComboBox.addItem(descriptionsArray[i]);
             toComboBox.addItem(descriptionsArray[i]);
         }
