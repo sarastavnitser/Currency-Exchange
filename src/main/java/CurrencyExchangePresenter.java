@@ -4,17 +4,23 @@ import json.CurrencyExchange;
 import json.CurrencyExchangeService;
 import json.Symbol;
 
+import javax.inject.Inject;
+import javax.inject.Provider;
+import javax.inject.Singleton;
 import java.util.Map;
-
+@Singleton
 public class CurrencyExchangePresenter {
 
-    private final CurrencyExchangeFrame view;
+    private final Provider<CurrencyExchangeFrame> viewProvider;
     private final CurrencyExchangeService model;
     private Disposable disposable;
     private Disposable symbolsDisposable;
 
-    public CurrencyExchangePresenter(CurrencyExchangeFrame view, CurrencyExchangeService model) {
-        this.view = view;
+    @Inject
+    public CurrencyExchangePresenter(
+            Provider<CurrencyExchangeFrame> viewProvider,
+            CurrencyExchangeService model) {
+        this.viewProvider = viewProvider;
         this.model = model;
     }
 
@@ -35,14 +41,14 @@ public class CurrencyExchangePresenter {
         String date = currencyExchange.getDate();
         double result = currencyExchange.getResult();
         double rate = currencyExchange.getRate();
-        view.setDateLabel(date);
-        view.setResultLabel(String.valueOf(result));
-        view.setRateLabel(rate);
+        viewProvider.get().setDateLabel(date);
+        viewProvider.get().setResultLabel(String.valueOf(result));
+        viewProvider.get().setRateLabel(rate);
     }
 
     private void onError(Throwable throwable) {
         throwable.printStackTrace();
-        view.showError();
+        viewProvider.get().showError();
     }
 
     public void loadSymbolsChoices() {
@@ -54,6 +60,6 @@ public class CurrencyExchangePresenter {
 
     private void onSymbolsNext(CurrencyExchange object) {
         Map<String, Symbol> symbols = object.getSymbols();
-        view.setSymbolsChoices(symbols);
+        viewProvider.get().setSymbolsChoices(symbols);
     }
 }
