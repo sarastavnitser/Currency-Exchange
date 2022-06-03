@@ -1,9 +1,9 @@
-package dagger;
+package currencyExchange.dagger;
 
 import dagger.Module;
-import json.CurrencyExchangeService;
+import currencyExchange.json.CurrencyExchangeService;
 import dagger.Provides;
-import json.CurrencyExchangeServiceFactory;
+import currencyExchange.json.CurrencyExchangeServiceFactory;
 
 import javax.inject.Singleton;
 

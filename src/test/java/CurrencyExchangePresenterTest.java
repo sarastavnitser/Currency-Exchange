@@ -1,17 +1,17 @@
+import currencyExchange.CurrencyExchangeFrame;
+import currencyExchange.CurrencyExchangePresenter;
 import io.reactivex.Single;
 import io.reactivex.plugins.RxJavaPlugins;
 import io.reactivex.schedulers.Schedulers;
-import json.CurrencyExchange;
-import json.CurrencyExchangeService;
-import json.Symbol;
+import currencyExchange.json.CurrencyExchange;
+import currencyExchange.json.CurrencyExchangeService;
+import currencyExchange.json.Symbol;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import java.util.HashMap;
 import java.util.Map;
 
-import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
 class CurrencyExchangePresenterTest {

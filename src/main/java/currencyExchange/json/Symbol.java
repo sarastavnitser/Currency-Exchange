@@ -1,4 +1,4 @@
-package json;
+package currencyExchange.json;
 
 public class Symbol {
     String description;

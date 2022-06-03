@@ -1,8 +1,9 @@
-package dagger;
+package currencyExchange.dagger;
 
 
 import javax.inject.Singleton;
-import CurrencyExchangeFrame;
+import currencyExchange.CurrencyExchangeFrame;
+import dagger.Component;
 
 @Singleton
 @Component(modules = {CurrencyExchangeModule.class})

@@ -1,5 +1,8 @@
 package json;
 
+import currencyExchange.json.CurrencyExchange;
+import currencyExchange.json.CurrencyExchangeService;
+import currencyExchange.json.CurrencyExchangeServiceFactory;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;

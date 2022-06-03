@@ -1,6 +1,8 @@
-import json.CurrencyExchangeServiceFactory;
-import json.Symbol;
-import dagger.CurrencyExchangeComponent;
+package currencyExchange;
+
+import currencyExchange.dagger.DaggerCurrencyExchangeComponent;
+import currencyExchange.json.CurrencyExchangeServiceFactory;
+import currencyExchange.json.Symbol;
 
 
 import javax.inject.Inject;
@@ -40,7 +42,6 @@ public class CurrencyExchangeFrame extends JFrame implements ItemListener {
         this.presenter = presenter;
 
         CurrencyExchangeServiceFactory factory = new CurrencyExchangeServiceFactory();
-
 
 
         setTitle("Currency Exchange");
@@ -176,9 +177,10 @@ public class CurrencyExchangeFrame extends JFrame implements ItemListener {
     }
 
     public static void main(String[] args) {
-        CurrencyExchangeFrame frame = DaggerCurrencyExchangeComponent
-                .create()
-                .getCurrencyExchangeFrame();
+        CurrencyExchangeFrame frame =
+                DaggerCurrencyExchangeComponent
+                        .create()
+                        .getCurrencyExchangeFrame();
         frame.setVisible(true);
     }
 }

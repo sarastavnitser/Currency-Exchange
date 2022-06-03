@@ -1,8 +1,10 @@
+package currencyExchange;
+
 import io.reactivex.disposables.Disposable;
 import io.reactivex.schedulers.Schedulers;
-import json.CurrencyExchange;
-import json.CurrencyExchangeService;
-import json.Symbol;
+import currencyExchange.json.CurrencyExchange;
+import currencyExchange.json.CurrencyExchangeService;
+import currencyExchange.json.Symbol;
 
 import javax.inject.Inject;
 import javax.inject.Provider;
