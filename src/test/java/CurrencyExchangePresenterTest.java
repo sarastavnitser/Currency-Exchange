@@ -10,6 +10,7 @@ import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import javax.inject.Provider;
 import java.util.Map;
 
 import static org.mockito.Mockito.*;
@@ -32,7 +33,8 @@ class CurrencyExchangePresenterTest {
         //given
         CurrencyExchangeFrame view = mock(CurrencyExchangeFrame.class);
         CurrencyExchangeService model = mock(CurrencyExchangeService.class);
-        CurrencyExchangePresenter presenter = new CurrencyExchangePresenter(view, model);
+        Provider<CurrencyExchangeFrame> viewProvider = () -> view;
+        CurrencyExchangePresenter presenter = new CurrencyExchangePresenter(viewProvider, model);
         CurrencyExchange currencyExchange = mock(CurrencyExchange.class);
         doReturn(100.0).when(currencyExchange).getResult();
         doReturn(Single.just(currencyExchange)).when(model).getCurrencyExchange(100, "USD", "ILS");
@@ -50,7 +52,8 @@ class CurrencyExchangePresenterTest {
         //given
         CurrencyExchangeFrame view = mock(CurrencyExchangeFrame.class);
         CurrencyExchangeService model = mock(CurrencyExchangeService.class);
-        CurrencyExchangePresenter presenter = new CurrencyExchangePresenter(view, model);
+        Provider<CurrencyExchangeFrame> viewProvider = () -> view;
+        CurrencyExchangePresenter presenter = new CurrencyExchangePresenter(viewProvider, model);
         CurrencyExchange currencyExchange = mock(CurrencyExchange.class);
         Map<String, Symbol> symbols = Map.of();
 
