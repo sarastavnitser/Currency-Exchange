@@ -1,6 +1,12 @@
-import json.CurrencyExchangeServiceFactory;
-import json.Symbol;
+package currencyExchange;
 
+import currencyExchange.dagger.DaggerCurrencyExchangeComponent;
+import currencyExchange.json.CurrencyExchangeServiceFactory;
+import currencyExchange.json.Symbol;
+
+
+import javax.inject.Inject;
+import javax.inject.Singleton;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
@@ -13,7 +19,7 @@ import java.lang.*;
 
 import static javax.swing.BoxLayout.*;
 
-
+@Singleton
 public class CurrencyExchangeFrame extends JFrame implements ItemListener {
     private final JLabel fromLabel;
     private final JLabel toLabel;
@@ -31,9 +37,11 @@ public class CurrencyExchangeFrame extends JFrame implements ItemListener {
     private String[] symbolsArray;
     private String[] descriptionsArray;
 
-    public CurrencyExchangeFrame() {
+    @Inject
+    public CurrencyExchangeFrame(CurrencyExchangePresenter presenter) {
+        this.presenter = presenter;
+
         CurrencyExchangeServiceFactory factory = new CurrencyExchangeServiceFactory();
-        presenter = new CurrencyExchangePresenter(this, factory.getInstance());
 
 
         setTitle("Currency Exchange");
@@ -169,7 +177,10 @@ public class CurrencyExchangeFrame extends JFrame implements ItemListener {
     }
 
     public static void main(String[] args) {
-        CurrencyExchangeFrame frame = new CurrencyExchangeFrame();
+        CurrencyExchangeFrame frame =
+                DaggerCurrencyExchangeComponent
+                        .create()
+                        .getCurrencyExchangeFrame();
         frame.setVisible(true);
     }
 }

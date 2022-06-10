@@ -1,4 +1,4 @@
-package json;
+package currencyExchange.json;
 
 import java.util.Map;
 
